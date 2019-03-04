@@ -115,8 +115,10 @@ pushd "${WORK_DIR}/build"
   --enable-vhost-scsi \
   --enable-vhost-user \
   --enable-vhost-vsock \
+  --enable-avx2 \
   --extra-cflags=" -O3 -fno-semantic-interposition -falign-functions=32 -D_FORTIFY_SOURCE=2 -fPIE" \
   --extra-ldflags=" -pie -z noexecstack -z relro -z now"
 popd
 
 make -j $(nproc) -C "${WORK_DIR}/build"
+make -j $(nproc) -C "${WORK_DIR}/build" install
