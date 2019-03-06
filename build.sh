@@ -2,23 +2,16 @@
 
 set -eu
 
+git clean -xdf
+git submodule foreach git clean -xdf
+git submodule foreach git submodule foreach git clean -xdf
+
 WORK_DIR="/tmp/qemu-static"
 QEMU_DIR="$(cd "$(dirname "$0")"; pwd)/qemu"
-SPICE_DIR="$(cd "$(dirname "$0")"; pwd)/spice"
 
 rm -fr "${WORK_DIR}"
 
-mkdir -p "${WORK_DIR}/build/spice"
 mkdir -p "${WORK_DIR}/build/qemu"
-mkdir -p "${WORK_DIR}/local"
-mkdir -p "${WORK_DIR}/local/gnemul"
-
-pushd "${WORK_DIR}/build/spice"
-"${SPICE_DIR}/autogen.sh"
-popd
-
-exit
-
 pushd "${WORK_DIR}/build/qemu"
 "${QEMU_DIR}/configure" \
   --prefix="${WORK_DIR}/local" \
@@ -123,7 +116,6 @@ pushd "${WORK_DIR}/build/qemu"
   --enable-vhost-scsi \
   --enable-vhost-user \
   --enable-vhost-vsock \
-  --enable-spice \
   --enable-avx2 \
   --extra-cflags=" -O3 -fno-semantic-interposition -falign-functions=32 -D_FORTIFY_SOURCE=2 -fPIE" \
   --extra-ldflags=" -pie -z noexecstack -z relro -z now"
@@ -131,3 +123,7 @@ popd
 
 make -j $(nproc) -C "${WORK_DIR}/build/qemu"
 make -j $(nproc) -C "${WORK_DIR}/build/qemu" install
+
+git clean -xdf
+git submodule foreach git clean -xdf
+git submodule foreach git submodule foreach git clean -xdf
