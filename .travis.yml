@@ -122,7 +122,7 @@ script:
   - mkdir -p /tmp/qemu-static/build
   - sudo mount -t tmpfs tmpfs /tmp/qemu-static/build
   - pushd /tmp/qemu-static/build
-  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}" || ( cat /tmp/qemu-static/build/qemu/config.log; exit 1 )
+  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}" || cat /tmp/qemu-static/build/qemu/config.log; exit 1
   - popd
   - make -j $(nproc) -C /tmp/qemu-static/build
   - make -j $(nproc) -C /tmp/qemu-static/build install
