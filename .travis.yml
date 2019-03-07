@@ -5,9 +5,7 @@ git:
   submodules: false
 env:
   global:
-    - CC="gcc-7"
-    - CXX="g++-7"
-    - CONFIG="--cc=${CC} --cxx=${CXX}"
+    - CONFIG="--cc=gcc-7 --cxx=g++-7"
     - CONFIG="${CONFIG} --prefix=/tmp/qemu-static/local"
     - CONFIG="${CONFIG} --interp-prefix=/tmp/qemu-static/local/gnemul"
     - CONFIG="${CONFIG} --target-list=aarch64-softmmu,x86_64-softmmu"
