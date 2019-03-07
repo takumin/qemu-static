@@ -6,8 +6,8 @@ addons:
     - ubuntu-toolchain-r-test
   apt:
     packages:
+    - binutils
     - gcc-7
-    - g++-7
     - make
 git:
   depth: 1
