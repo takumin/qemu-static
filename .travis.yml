@@ -6,8 +6,9 @@ addons:
     - build-essential
 git:
   submodules: false
+before_script:
+  - git submodule update --init --recursive --depth 500
 script:
-  - git submodule update --init --recursive --depth 100
   - mkdir -p /tmp/qemu-static/build
   - sudo mount -t tmpfs tmpfs /tmp/qemu-static/build
   - pushd /tmp/qemu-static/build
@@ -122,4 +123,5 @@ script:
   - popd
   - make -j $(nproc) -C /tmp/qemu-static/build
   - make -j $(nproc) -C /tmp/qemu-static/build install
+after_script:
   - tree /tmp/qemu-static/local
