@@ -16,7 +16,7 @@ pushd "${WORK_DIR}/build/qemu"
 "${QEMU_DIR}/configure" \
   --prefix="${WORK_DIR}/local" \
   --interp-prefix="${WORK_DIR}/local/gnemul" \
-  --target-list=x86_64-softmmu \
+  --target-list=aarch64-softmmu,x86_64-softmmu \
   --static \
   --disable-system \
   --disable-user \
@@ -111,6 +111,7 @@ pushd "${WORK_DIR}/build/qemu"
   --disable-libpmem \
   --enable-system \
   --enable-kvm \
+  --enable-fdt \
   --enable-vhost-crypto \
   --enable-vhost-net \
   --enable-vhost-scsi \
