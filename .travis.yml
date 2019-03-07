@@ -1,21 +1,13 @@
 dist: xenial
 language: minimal
-# addons:
-#   update: true
-#   sources:
-#     - ubuntu-toolchain-r-test
-#   apt:
-#     packages:
-#     - binutils
-#     - gcc-7
-#     - g++-7
-#     - make
 git:
   depth: 1
   submodules: false
 env:
   global:
-    - CONFIG="--cc=gcc-7 --cxx=g++-7"
+    - CC="gcc-7"
+    - CXX="g++-7"
+    - CONFIG="--cc=${CC} --cxx=${CXX}"
     - CONFIG="${CONFIG} --prefix=/tmp/qemu-static/local"
     - CONFIG="${CONFIG} --interp-prefix=/tmp/qemu-static/local/gnemul"
     - CONFIG="${CONFIG} --target-list=aarch64-softmmu,x86_64-softmmu"
@@ -130,7 +122,7 @@ script:
   - mkdir -p /tmp/qemu-static/build
   - sudo mount -t tmpfs tmpfs /tmp/qemu-static/build
   - pushd /tmp/qemu-static/build
-  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}" || { cat /tmp/qemu-static/build/qemu/config.log; exit 1 }
+  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}" || ( cat /tmp/qemu-static/build/qemu/config.log; exit 1 )
   - popd
   - make -j $(nproc) -C /tmp/qemu-static/build
   - make -j $(nproc) -C /tmp/qemu-static/build install
