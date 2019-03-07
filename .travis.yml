@@ -15,7 +15,7 @@ script:
       ${TRAVIS_BUILD_DIR}/qemu/configure
       --prefix=/tmp/qemu-static/local
       --interp-prefix=/tmp/qemu-static/local/gnemul
-      --target-list=aarch64-softmmu,x86_64-softmmu
+      --target-list=x86_64-softmmu
       --cc=gcc-7
       --cxx=g++-7
       --static
@@ -111,7 +111,6 @@ script:
       --disable-debug-mutex
       --disable-libpmem
       --enable-system
-      --enable-fdt
       --enable-kvm
       --enable-vhost-crypto
       --enable-vhost-net
@@ -124,4 +123,4 @@ script:
   - popd
   - make -j $(nproc) -C /tmp/qemu-static/build
   - make -j $(nproc) -C /tmp/qemu-static/build install
-  - tree /tmp/qemu-static/local
+  - file /tmp/qemu-static/local/bin/qemu-system-x86_64
