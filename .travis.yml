@@ -1,14 +1,15 @@
 dist: xenial
 language: minimal
-addons:
-  update: true
-  sources:
-    - ubuntu-toolchain-r-test
-  apt:
-    packages:
-    - binutils
-    - gcc-7
-    - make
+# addons:
+#   update: true
+#   sources:
+#     - ubuntu-toolchain-r-test
+#   apt:
+#     packages:
+#     - binutils
+#     - gcc-7
+#     - g++-7
+#     - make
 git:
   depth: 1
   submodules: false
@@ -122,11 +123,14 @@ env:
     - CONFIG="${CONFIG} --extra-cflags=' -O3 -fno-semantic-interposition -falign-functions=32 -D_FORTIFY_SOURCE=2 -fPIE -fuse-ld=gold'"
     - CONFIG="${CONFIG} --extra-ldflags=' -pie -z noexecstack -z relro -z now'"
 script:
-  - git submodule update --init --recursive --depth 500
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -q
+  - sudo apt-get install gcc-7 g++-7 -y
+  - git submodule update --init --recursive --depth 500 || exit 1
   - mkdir -p /tmp/qemu-static/build
   - sudo mount -t tmpfs tmpfs /tmp/qemu-static/build
   - pushd /tmp/qemu-static/build
-  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}"
+  - ${TRAVIS_BUILD_DIR}/qemu/configure "${CONFIG}" || { cat /tmp/qemu-static/build/qemu/config.log; exit 1 }
   - popd
   - make -j $(nproc) -C /tmp/qemu-static/build
   - make -j $(nproc) -C /tmp/qemu-static/build install
