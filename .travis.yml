@@ -1,9 +1,11 @@
 dist: xenial
 language: c
+compiler: gcc
 addons:
   apt:
     packages:
     - build-essential
+    - make
 git:
   depth: 1
   submodules: false
