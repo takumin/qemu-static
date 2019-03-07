@@ -3,9 +3,9 @@ language: c
 addons:
   apt:
     packages:
-    - qemu
+    - build-essential
 git:
-  submodule: false
+  submodules: false
 script:
   - git submodule update --init --recursive --depth 50
   - mkdir -p /tmp/qemu-static/build
