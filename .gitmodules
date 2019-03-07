@@ -1,9 +1,3 @@
 [submodule "qemu"]
 	path = qemu
 	url = https://github.com/qemu/qemu.git
-[submodule "spice-protocol"]
-	path = spice-protocol
-	url = https://gitlab.freedesktop.org/spice/spice-protocol.git
-[submodule "spice"]
-	path = spice
-	url = https://gitlab.freedesktop.org/spice/spice.git
