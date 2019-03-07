@@ -15,7 +15,7 @@ script:
       "${TRAVIS_BUILD_DIR}/qemu/configure"
       --prefix="/tmp/qemu-static/local"
       --interp-prefix="/tmp/qemu-static/local/gnemul"
-      --target-list=x86_64-softmmu
+      --target-list=aarch64-softmmu,x86_64-softmmu
       --static
       --disable-system
       --disable-user
