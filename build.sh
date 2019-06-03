@@ -16,7 +16,7 @@ pushd "${WORK_DIR}/build/qemu"
 "${QEMU_DIR}/configure" \
   --prefix="${WORK_DIR}/local" \
   --interp-prefix="${WORK_DIR}/local/gnemul" \
-  --target-list=aarch64-softmmu,x86_64-softmmu \
+  --target-list=x86_64-softmmu \
   --static \
   --disable-system \
   --disable-user \
@@ -118,6 +118,7 @@ pushd "${WORK_DIR}/build/qemu"
   --enable-vhost-user \
   --enable-vhost-vsock \
   --enable-avx2 \
+  --audio-drv-list="" \
   --extra-cflags=" -O3 -fno-semantic-interposition -falign-functions=32 -D_FORTIFY_SOURCE=2 -fPIE" \
   --extra-ldflags=" -pie -z noexecstack -z relro -z now"
 popd
