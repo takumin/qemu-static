@@ -13,7 +13,7 @@ env:
   BUILD_DIR="/tmp/qemu"
   INSTALL_DIR="/opt/qemu"
 before_script:
-  - git submodule update --init --recursive --depth 100 || exit 1
+  - git submodule update --init --recursive --recommend-shallow --depth 500 || exit 1
   - mkdir -p ${BUILD_DIR}
   - sudo mount -t tmpfs tmpfs ${BUILD_DIR}
 script:
