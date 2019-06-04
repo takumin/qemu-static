@@ -3,16 +3,17 @@ language: minimal
 git:
   depth: 1
   submodules: false
+addons:
+  sources:
+    - ubuntu-toolchain-r-test
+  packages:
+    - gcc-7
+    - g++-7 -y
 env:
   BUILD_DIR="/tmp/qemu"
   INSTALL_DIR="/opt/qemu"
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-install:
-  - sudo apt-get update -q
-  - sudo apt-get install gcc-7 g++-7 -y
 before_script:
-  - git submodule update --init --recursive --recommend-shallow --depth 1 || exit 1
+  - git submodule update --init --recursive --depth 100 || exit 1
   - mkdir -p ${BUILD_DIR}
   - sudo mount -t tmpfs tmpfs ${BUILD_DIR}
 script:
