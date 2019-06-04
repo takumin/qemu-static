@@ -132,9 +132,9 @@ script:
       --extra-ldflags=' -pie -z noexecstack -z relro -z now'
   - popd
   - make -j $(nproc) -C ${BUILD_DIR}
-  - sudo make -j $(nproc) -C ${BUILD_DIR} install
+  - make -j $(nproc) -C ${BUILD_DIR} install
 before_deploy:
-  - sudo tar -cvJf qemu-static-x86_64.tar.xz -C ${INSTALL_DIR} .
+  - tar -cvJf qemu-static-x86_64.tar.xz -C ${INSTALL_DIR} .
   - sha256sum qemu-static-x86_64.tar.xz > qemu-static-x86_64.tar.xz.sha256
   - cat qemu-static-x86_64.sha256
 deploy:
