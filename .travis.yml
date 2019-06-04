@@ -4,11 +4,13 @@ git:
   depth: 1
   submodules: false
 addons:
-  sources:
-    - ubuntu-toolchain-r-test
-  packages:
-    - gcc-7
-    - g++-7 -y
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    update: true
+    packages:
+      - gcc-7
+      - g++-7
 env:
   BUILD_DIR="/tmp/qemu"
   INSTALL_DIR="/opt/qemu"
