@@ -3,18 +3,24 @@ language: minimal
 git:
   depth: 1
   submodules: false
-script:
+env:
+  BUILD_DIR="/tmp/qemu"
+  INSTALL_DIR="/opt/qemu"
+before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+install:
   - sudo apt-get update -q
   - sudo apt-get install gcc-7 g++-7 -y
-  - git submodule update --init --recursive --depth 500 || exit 1
-  - mkdir -p /tmp/qemu-static/build
-  - sudo mount -t tmpfs tmpfs /tmp/qemu-static/build
-  - pushd /tmp/qemu-static/build
+before_script:
+  - git submodule update --init --recursive --recommend-shallow --depth 1 || exit 1
+  - mkdir -p ${BUILD_DIR}
+  - sudo mount -t tmpfs tmpfs ${BUILD_DIR}
+script:
+  - pushd ${BUILD_DIR}
   - >
       ${TRAVIS_BUILD_DIR}/qemu/configure
-      --prefix=/tmp/qemu-static/local
-      --interp-prefix=/tmp/qemu-static/local/gnemul
+      --prefix=${INSTALL_DIR}
+      --interp-prefix=${INSTALL_DIR}/gnemul
       --target-list=x86_64-softmmu
       --cc=gcc-7
       --cxx=g++-7
@@ -122,20 +128,20 @@ script:
       --extra-cflags=' -O3 -fno-semantic-interposition -falign-functions=32 -D_FORTIFY_SOURCE=2 -fPIE -fuse-ld=gold'
       --extra-ldflags=' -pie -z noexecstack -z relro -z now'
   - popd
-  - make -j $(nproc) -C /tmp/qemu-static/build
-  - make -j $(nproc) -C /tmp/qemu-static/build install
-  - cp /tmp/qemu-static/local/bin/qemu-system-x86_64 .
-  - sha256sum qemu-system-x86_64 > qemu-system-x86_64.sha256
-  - file qemu-system-x86_64
-  - cat qemu-system-x86_64.sha256
+  - make -j $(nproc) -C ${BUILD_DIR}
+  - sudo make -j $(nproc) -C ${BUILD_DIR} install
+before_deploy:
+  - sudo tar -cvJf qemu-static-x86_64.tar.xz -C ${INSTALL_DIR} .
+  - sha256sum qemu-static-x86_64.tar.xz > qemu-static-x86_64.tar.xz.sha256
+  - cat qemu-static-x86_64.sha256
 deploy:
   provider: releases
   api_key:
     secure: "Zc7QBymrYkbTQYLTtHwkAOwQ9WWC8HT6E3zcFsLmkP9X3RmNnjMXeXtBMw4Efs4y/hmudGKwvKs6G4FcRFWtGnfdOxh2CMtYtQ00NOCdW7zHzO2oldsg/S6zN0cljdOIiOUnDI8tdj0BLRhPG+XUfKYR6VQwMnmj+EnihbcGg2B1nFT41lqh3ThX6YhjAg1JxBM1t0w0fmn7CudXQR1Mx7e2diF9XxsNBw6FhEqC3J9/Qhk4t3TFywa0XdFXH1JW/QFMjEgAiFE4lsPpmKS+oDLLTOOBsYhypapYd54GMfQZzm+6k71vBVbgB/H3XtaORYvdJWP78m4sT+i8rWh8NadqTaQRj4cJ8yX2S46Wmi+mZ+ofqB5TVsGrDtMLOWJ+BbxnjydL2ziXuh9WXeySAvZy++YbrApYTtuyztTYC1dlZVKP9CxnUGZrj4CeU2Ouf0aX4UUWZWahl2ZNi5Y3SXWC0ueB+wgLhdi3eomkLI3DsQ/v6suudJQJCTAdTOaS40JMnUvArQipbEtoa+5IV0RdI73fAL6EdPAJArmBykQ3skLJkwSkYYhw+NvO8br/80HlqeZnhp+UYUgxVUhAlwbAPYTXuHQfT9dwHI8hnmncY9iacD7bGih3IdSyg2k1StN5Mg8qYEt+MlSv9TqmVksYiCFq6omSiggAoGlVu14="
   file_glob: true
   file:
-    - "qemu-system-x86_64"
-    - "qemu-system-x86_64.sha256"
+    - "qemu-static-x86_64.tar.xz"
+    - "qemu-static-x86_64.tar.xz.sha256"
   skip_cleanup: true
   on:
     tags: true

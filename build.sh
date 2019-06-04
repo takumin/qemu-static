@@ -6,16 +6,16 @@ git clean -xdf
 git submodule foreach git clean -xdf
 git submodule foreach git submodule foreach git clean -xdf
 
-WORK_DIR="/tmp/qemu-static"
+BUILD_DIR="/tmp/qemu"
+INSTALL_DIR="/opt/qemu"
 QEMU_DIR="$(cd "$(dirname "$0")"; pwd)/qemu"
 
-rm -fr "${WORK_DIR}"
-
-mkdir -p "${WORK_DIR}/build/qemu"
-pushd "${WORK_DIR}/build/qemu"
+rm -fr "${BUILD_DIR}"
+mkdir -p "${BUILD_DIR}"
+pushd "${BUILD_DIR}"
 "${QEMU_DIR}/configure" \
-  --prefix="${WORK_DIR}/local" \
-  --interp-prefix="${WORK_DIR}/local/gnemul" \
+  --prefix="${INSTALL_DIR}" \
+  --interp-prefix="${INSTALL_DIR}/gnemul" \
   --target-list=x86_64-softmmu \
   --static \
   --disable-system \
@@ -123,8 +123,8 @@ pushd "${WORK_DIR}/build/qemu"
   --extra-ldflags=" -pie -z noexecstack -z relro -z now"
 popd
 
-make -j $(nproc) -C "${WORK_DIR}/build/qemu"
-make -j $(nproc) -C "${WORK_DIR}/build/qemu" install
+make -j $(nproc) -C "${BUILD_DIR}"
+sudo make -j $(nproc) -C "${BUILD_DIR}" install
 
 git clean -xdf
 git submodule foreach git clean -xdf
